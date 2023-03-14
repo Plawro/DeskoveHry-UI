@@ -1,4 +1,4 @@
-# NotWorking_Ignore
-bro idk what im doimng help me pls
+# Deskové hry
+Aplikace pro procházení deskových her ze souboru.
 <hr>
-hh what is wrooong 
+Vytvořeno do předmětu programování.
