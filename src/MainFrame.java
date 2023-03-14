@@ -1,11 +1,14 @@
 
 
+import com.sun.tools.javac.Main;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
+
 
 public class MainFrame extends JFrame{
     private JFileChooser chooser = new JFileChooser(".");
@@ -54,8 +57,31 @@ public class MainFrame extends JFrame{
                 line = scanner.nextLine();
                 String parametry[] = line.split(separator);
                 nazevHry.add(parametry[0]);
-                vlastnimeHru.add(parametry[1]);
-                oblibenostHry.add(Integer.parseInt(parametry[2]));
+
+
+                try {
+                    if(Integer.parseInt(parametry[2]) <= 3 && Integer.parseInt(parametry[2]) > 0){
+                        oblibenostHry.add(Integer.parseInt(parametry[2]));
+                    } else {
+                        JOptionPane.showMessageDialog(this,"Oblíbenost musí být číslo v rozmezí 1-3!");
+                    }
+                }catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this,"Oblíbenost musí být číslo!");
+                    mainPanel.setVisible(false);
+                    throw new RuntimeException("Oblíbenost musí být číslo!");
+
+                }
+
+
+                if(parametry[1].equals("Ano")){
+                    vlastnimeHru.add(parametry[1]);
+                }else if (parametry[1].equals("Ne")){
+                    vlastnimeHru.add(parametry[1]);
+                } else {
+                    JOptionPane.showMessageDialog(this,"Špatná informace o vlastnění hry! Musí být Ano/Ne");
+                    vlastnimeHru.add("Err"); // Nebo udělat, že se "automaticky" nastaví na "Ne"
+
+                }
             }
         }catch (FileNotFoundException e){
             throw new RuntimeException(e);
@@ -110,14 +136,19 @@ public class MainFrame extends JFrame{
         }else {
             textField1.setText(nazevHry.get(aktualniDeskovka));
 
-            for (int i = 0; i < rateButtons.size(); i++) { //3 jsou radio buttony
-                rateButtons.get(i).setSelected(i == aktualniDeskovka);
+            for (JRadioButton radioButton : rateButtons) {
+                radioButton.setSelected(false);
             }
-
+            rateButtons.get(oblibenostHry.get(aktualniDeskovka)-1).setSelected(true);
             if(vlastnimeHru.get(aktualniDeskovka).equals("Ano")){
                 ownedButton.setSelected(true);
+                ownedButton.setVisible(true);
+            }else if (vlastnimeHru.get(aktualniDeskovka).equals("Ne")){
+                ownedButton.setSelected(false);
+                ownedButton.setVisible(true);
             }else{
                 ownedButton.setSelected(false);
+                ownedButton.setVisible(false);
             }
 
         }
